@@ -353,7 +353,7 @@ services:
 			dockerfile: Dockerfile.dev
 		ports:
 			- "3000:3000"
-		links:
+		depends_on:
 			- monguitoPrueba
 		volumes:
 			- .:/home/app
@@ -385,3 +385,37 @@ docker compose -f docker-compose-dev.yml up
 Con -f le indicamos que es un archivo docker compose completamente customizado que no sea docker-compose.yml
 
 De esta manera es que podemos tener 2 ambientes de trabajo, uno de producción y otro de desarrollo.
+
+
+
+
+depends_on: sirve para decirle a mi compose que el contenedor de phpmyadmin depende de la existencia de mysql
+
+PMA_ARBITRARY: es para permitir a máquinas distintas conectarse
+
+En clase hemos usado:
+```bash
+version: "3.9"  
+services:  
+  mysql:  
+    image: mysql  
+    container_name: bd_mysql_sebas  
+    ports:  
+      - "23307:3306"  
+    volumes:  
+      - ./mysql:/var/lib/mysql  
+    environment:  
+      - MYSQL_USER=sebas  
+      - MYSQL_PASSWORD=sebas  
+      - MYSQL_DATABASE=dwes  
+      - MYSQL_ROOT_PASSWORD=root  
+  phpmyadmin:  
+    image: phpmyadmin  
+    ports:  
+      - "8807:80"  
+    depends_on:  
+      - mysql  
+    environment:  
+      - PMA_HOST=mysql  
+      - PMA_ARBITRARY=1
+```
